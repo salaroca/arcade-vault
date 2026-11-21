@@ -4,13 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 @AGENTS.md
 
-## Commands
 
-```bash
-npm run dev      # start dev server (Turbopack)
-npm run build    # production build
-npm run lint     # ESLint
-```
 
 No test suite configured yet.
 
@@ -21,6 +15,10 @@ No test suite configured yet.
 - **TypeScript**
 - **Tailwind CSS v4** — imported via `@import "tailwindcss"` and configured through `@theme` blocks in CSS, not `tailwind.config.js`
 - **Turbopack** in dev (CSS processed via `@tailwindcss/turbopack`)
+
+
+## Skills
+Usa siempre /frontend-design para hacer interfaz de usuario. 
 
 ## Architecture
 
