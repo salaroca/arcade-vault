@@ -18,7 +18,7 @@ export default function GameDetail({ id }: { id: string }) {
         <button
           className="btn ghost"
           style={{ marginTop: 20 }}
-          onClick={() => router.push("/")}
+          onClick={() => router.push("/biblioteca")}
         >
           VOLVER
         </button>
@@ -77,7 +77,7 @@ export default function GameDetail({ id }: { id: string }) {
             >
               ▶  JUGAR AHORA
             </button>
-            <button className="btn ghost lg" onClick={() => router.push("/")}>
+            <button className="btn ghost lg" onClick={() => router.push("/biblioteca")}>
               VOLVER AL VAULT
             </button>
           </div>
