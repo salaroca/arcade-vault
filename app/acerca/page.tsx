@@ -75,15 +75,34 @@ export default function Acerca() {
   const [form, setForm] = useState({ name: "", email: "", msg: "" });
   const [sent, setSent] = useState<string | null>(null);
   const [shake, setShake] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name.trim() || !form.email.trim() || !form.msg.trim()) {
       setShake(true);
       setTimeout(() => setShake(false), 400);
       return;
     }
-    setSent(form.name.trim());
+    setLoading(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (data.ok) {
+        setSent(form.name.trim());
+      } else {
+        setError(data.error ?? "Error desconocido");
+      }
+    } catch {
+      setError("Error de red. Comprueba tu conexión e inténtalo de nuevo.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -170,10 +189,34 @@ export default function Acerca() {
                     placeholder="Cuéntanos qué tienes en mente…"
                   />
                 </div>
-                <button className="btn xl press" type="submit" style={{ width: "100%" }}>
-                  ▶&nbsp; ENVIAR MENSAJE
+                <button className="btn xl press" type="submit" style={{ width: "100%" }} disabled={loading}>
+                  {loading ? "ENVIANDO…" : "▶  ENVIAR MENSAJE"}
                 </button>
               </>
+            ) : error !== null ? (
+              <div className="terminal-success">
+                <div className="term-bar">
+                  <span className="dot r" /><span className="dot y" /><span className="dot g" />
+                  <span className="term-title">VAULT-OS // TERMINAL</span>
+                </div>
+                <div className="term-body">
+                  <div className="line"><span className="prompt">vault@arcade:~$</span> ./send_message --to=team</div>
+                  <div className="line dim">[OK] Conectando con servidor…</div>
+                  <div className="line" style={{ color: "var(--magenta, #f0f)" }}>
+                    [ERR] TRANSMISIÓN FALLIDA: {error.toUpperCase()}
+                    <span className="caret">_</span>
+                  </div>
+                  <div style={{ marginTop: 18 }}>
+                    <button
+                      className="btn ghost"
+                      type="button"
+                      onClick={() => setError(null)}
+                    >
+                      REINTENTAR
+                    </button>
+                  </div>
+                </div>
+              </div>
             ) : (
               <div className="terminal-success">
                 <div className="term-bar">
