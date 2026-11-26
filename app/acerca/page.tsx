@@ -75,15 +75,34 @@ export default function Acerca() {
   const [form, setForm] = useState({ name: "", email: "", msg: "" });
   const [sent, setSent] = useState<string | null>(null);
   const [shake, setShake] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name.trim() || !form.email.trim() || !form.msg.trim()) {
       setShake(true);
       setTimeout(() => setShake(false), 400);
       return;
     }
-    setSent(form.name.trim());
+    setLoading(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (data.ok) {
+        setSent(form.name.trim());
+      } else {
+        setError(data.error ?? "Error desconocido");
+      }
+    } catch {
+      setError("Error de red. Comprueba tu conexión e inténtalo de nuevo.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -170,8 +189,8 @@ export default function Acerca() {
                     placeholder="Cuéntanos qué tienes en mente…"
                   />
                 </div>
-                <button className="btn xl press" type="submit" style={{ width: "100%" }}>
-                  ▶&nbsp; ENVIAR MENSAJE
+                <button className="btn xl press" type="submit" style={{ width: "100%" }} disabled={loading}>
+                  {loading ? "ENVIANDO…" : "▶  ENVIAR MENSAJE"}
                 </button>
               </>
             ) : (
