@@ -13,7 +13,7 @@
 
 - Obtener las credenciales del proyecto Supabase existente.
 - Instalar `@supabase/supabase-js` y `@supabase/ssr`.
-- Añadir `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY` a `.env.local` y a `.env.template`.
+- Añadir `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` a `.env.local` y a `.env.template`.
 - Crear helper de cliente para el **browser**: `lib/supabase/client.ts`.
 - Crear helper de cliente para el **servidor** (Server Components / Route Handlers): `lib/supabase/server.ts`.
 - Verificar que el cliente se inicializa correctamente arrancando la app.
@@ -45,7 +45,7 @@ No se introducen nuevas estructuras de datos en la aplicación. Los helpers devu
 
    ```
    NEXT_PUBLIC_SUPABASE_URL=<Project URL>
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon public key>
+   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<anon public key>
    ```
 
    Añadir las mismas claves (sin valor) a `.env.template`. Verificar: `.env.local` contiene ambas variables con sus valores reales.
@@ -58,7 +58,7 @@ No se introducen nuevas estructuras de datos en la aplicación. Los helpers devu
    export function createClient() {
      return createBrowserClient(
        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+       process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
      );
    }
    ```
@@ -75,7 +75,7 @@ No se introducen nuevas estructuras de datos en la aplicación. Los helpers devu
      const cookieStore = await cookies();
      return createServerClient(
        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+       process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
        {
          cookies: {
            getAll() {
@@ -103,7 +103,7 @@ No se introducen nuevas estructuras de datos en la aplicación. Los helpers devu
 ## Acceptance criteria
 
 - [ ] `npm install` completa sin errores; `package.json` incluye `@supabase/supabase-js` y `@supabase/ssr`.
-- [ ] `.env.local` contiene `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY` con valores reales.
+- [ ] `.env.local` contiene `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` con valores reales.
 - [ ] `.env.template` contiene las mismas claves sin valor.
 - [ ] `lib/supabase/client.ts` existe y exporta `createClient()`.
 - [ ] `lib/supabase/server.ts` existe y exporta `createClient()`.
